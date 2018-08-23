@@ -5,7 +5,7 @@
  * @package    Om
  * @author     Luciano Laranjeira <inbox@lucianolaranjeira.com>
  * @link       https://github.com/lucianolaranjeira/om
- * @version    Beta 1.0.0 • Tuesday, August 21, 2018
+ * @version    Beta 1.0.1 • Tuesday, August 22, 2018
  */
 
 namespace lib;
@@ -20,88 +20,67 @@ abstract class App
     public static $controllers = 'app\controllers';
 
     /**
-     * The REQUEST follows the structure below:
-     *
-     *              [8]
-     *      |--------------------------------|
-     *   GET http://domain.com:00000/myfolder/user/macgyver?firstname=Angus&lastname=MacGyver
-     *  |---|------|----------|-----|--------|-------------|---------------------------------|
-     *   [1]   [2]     [3]      [4]     [5]        [6]                    [7]
-     *
-     * For example:
-     *
-     *    [1] method     = GET
-     *    [2] protocol   = HTTP
-     *    [3] domain     = domain.com
-     *    [4] port       = 00000
-     *    [5] folder     = /myfolder/
-     *    [6] path       = user/macgyver
-     *    [7] parameters = array('firstname' => 'Angus', 'lastname' => 'MacGyver')
-     *    [8] base       = http://domain.com:00000/myfolder/
-     */
-
-    /**
      * HTTP request method.
      *
      * @var string $method
      */
-    public static $method;
+    private static $method;
 
     /**
      * HTTP request protocol.
      *
      * @var string $protocol
      */
-    public static $protocol;
+    private static $protocol;
 
     /**
      * HTTP request domain.
      *
      * @var string $domain
      */
-    public static $domain;
+    private static $domain;
 
     /**
      * HTTP request port.
      *
      * @var string $port
      */
-    public static $port;
+    private static $port;
 
     /**
      * HTTP request folder.
      *
      * @var string $folder
      */
-    public static $folder = '/';
+    private static $folder;
 
     /**
      * HTTP request path.
      *
      * @var string $path
      */
-    public static $path;
+    private static $path;
 
     /**
      * HTTP request parameters.
      *
      * @var string $parameters
      */
-    public static $parameters = array();
+    private static $parameters = array();
 
     /**
      * HTTP request base.
      *
      * @var string $base
      */
-    public static $base;
+    private static $base;
 
     /**
      * User agent browser details.
      *
      * @var array $browser
      */
-    public static $browser = array();
+    private static $browser = array();
 
     /**
      * Getting things done.
@@ -113,34 +92,134 @@ abstract class App
      */
     public static function run(array $routes, $folder = '/')
     {
+
+        /**
+         * The REQUEST follows the structure below:
+         *
+         *              [8]
+         *      |--------------------------------|
+         *   GET http://domain.com:00000/myfolder/user/macgyver?firstname=Angus&lastname=MacGyver
+         *  |---|------|----------|-----|--------|-------------|---------------------------------|
+         *   [1]   [2]     [3]      [4]     [5]        [6]                    [7]
+         *
+         * For example:
+         *
+         *    [1] method     = GET
+         *    [2] protocol   = HTTP
+         *    [3] domain     = domain.com
+         *    [4] port       = 00000
+         *    [5] folder     = /myfolder/
+         *    [6] path       = user/macgyver
+         *    [7] parameters = array('firstname' => 'Angus', 'lastname' => 'MacGyver')
+         *    [8] base       = http://domain.com:00000/myfolder/
+         */
+
         // Set app folder..
+
         App::$folder = $folder;
 
-        // HTTP request method.
-        App::$method = App::getMethod();
+        // Get HTTP request method.
 
-        // HTTP request protocol.
-        App::$protocol = App::getProtocol();
+        $method = $_SERVER['REQUEST_METHOD'];
 
-        // HTTP request domain.
-        App::$domain = App::getDomain();
+        if (($method == 'POST') and (array_key_exists('HTTP_X_HTTP_METHOD', $_SERVER)))
+        {
+            if ($_SERVER['HTTP_X_HTTP_METHOD'] == 'DELETE')
+            {
+                $method = 'DELETE';
+            }
+            else if ($_SERVER['HTTP_X_HTTP_METHOD'] == 'PUT')
+            {
+                $method = 'PUT';
+            }
+            else
+            {
+                $method = null;
+            }
+        }
 
-        // HTTP request port.
-        App::$port = App::getPort();
+        App::$method = $method;
 
-        // HTTP request path.
-        App::$path = App::getPath();
+        // Get HTTP request protocol.
 
-        // HTTP request parameters.
-        App::$parameters = App::getParameters();
+        App::$protocol = $_SERVER['REQUEST_SCHEME'];
 
-        // HTTP request base.
-        App::$base = App::getBase();
+        // Get HTTP request domain.
 
-        // User agent browser details.
-        App::$browser = App::getBrowser();
+        App::$domain = $_SERVER['SERVER_NAME'];
+
+        // Get HTTP request port.
+
+        App::$port = $_SERVER['SERVER_PORT'];
+
+        // Get HTTP request path.
+
+        $path = $_SERVER['REQUEST_URI'];
+
+        if (isset($_SERVER['QUERY_STRING']))
+        {
+            $query_string = $_SERVER['QUERY_STRING'];
+
+            if ($query_string)
+            {
+                if (!($query_string[0] === '?'))
+                {
+                    $query_string = '?' . $query_string;
+                }
+
+                $path = rtrim($path, $query_string);
+            }
+        }
+
+        $path = trim(substr($path, strlen(App::$folder)), '/');
+
+        App::$path = $path;
+
+        // Get HTTP request parameters.
+
+        $parameters = array();
+
+        switch(App::$method)
+        {
+            case 'GET':
+
+                $parameters = $_GET;
+
+                break;
+
+            case 'POST':
+
+                $parameters = $_POST;
+
+                break;
+
+            case 'PUT':
+
+                $parameters = App::parseInputFile();
+
+                break;
+
+            default:
+
+                // nevermind.
+
+                $parameters = null;
+
+                break;
+        }
+
+        App::$parameters = $parameters;
+
+        // Get HTTP request base.
+
+        App::$base = App::$protocol . '://' . App::$domain . ':' . App::$port . App::$folder;
+
+        // Get user agent browser details.
+
+        App::$browser = App::parseUserAgent();
 
         // Include routes files.
+
         foreach ($routes as $route)
         {
             if (file_exists($route))
@@ -347,130 +426,6 @@ abstract class App
     }
 
     /**
-     * Get HTTP request method.
-     *
-     * @return string
-     */
-    private static function getMethod()
-    {
-        $method = $_SERVER['REQUEST_METHOD'];
-
-        if (($method == 'POST') and (array_key_exists('HTTP_X_HTTP_METHOD', $_SERVER)))
-        {
-            if ($_SERVER['HTTP_X_HTTP_METHOD'] == 'DELETE')
-            {
-                $method = 'DELETE';
-            }
-            else if ($_SERVER['HTTP_X_HTTP_METHOD'] == 'PUT')
-            {
-                $method = 'PUT';
-            }
-            else
-            {
-                $method = null;
-            }
-        }
-
-        return $method;
-    }
-
-    /**
-     * Get HTTP request protocol.
-     *
-     * @return string
-     */
-    public static function getProtocol()
-    {
-        return $_SERVER['REQUEST_SCHEME'];
-    }
-
-    /**
-     * Get HTTP request domain.
-     *
-     * @return string
-     */
-    private static function getDomain()
-    {
-        return $_SERVER['SERVER_NAME'];
-    }
-
-    /**
-     * Get HTTP request port.
-     *
-     * @return string
-     */
-    private static function getPort()
-    {
-        return $_SERVER['SERVER_PORT'];
-    }
-
-    /**
-     * Get HTTP request path.
-     *
-     * @return string
-     */
-    private static function getPath()
-    {
-        $path = $_SERVER['REQUEST_URI'];
-
-        if (isset($_SERVER['QUERY_STRING']))
-        {
-            $query_string = $_SERVER['QUERY_STRING'];
-
-            if ($query_string)
-            {
-                if (!($query_string[0] === '?'))
-                {
-                    $query_string = '?' . $query_string;
-                }
-
-                $path = rtrim($path, $query_string);
-            }
-        }
-
-        $path = trim(substr($path, strlen(App::$folder)), '/');
-
-        return $path;
-    }
-
-    /**
-     * Get HTTP request parameters.
-     *
-     * @return array
-     */
-    private static function getParameters()
-    {
-        switch(App::$method)
-        {
-            case 'GET':
-
-                return $_GET;
-
-                break;
-
-            case 'POST':
-
-                return $_POST;
-
-                break;
-
-            case 'PUT':
-
-                return App::parseInputFile();
-
-                break;
-
-            default:
-
-                // nevermind.
-
-                return null;
-
-                break;
-        }
-    }
-
-    /**
      * Parse "php://input" file.
      *
      * @return array
@@ -573,24 +528,14 @@ abstract class App
     }
 
     /**
-     * Get HTTP request base.
-     *
-     * @return string
-     */
-    private static function getBase()
-    {
-        return App::$protocol . '://' . App::$domain . ':' . App::$port . App::$folder;
-    }
-
-    /**
      * Get user agent browser details.
      *
      * @return array
      */
-    private static function getBrowser()
+    private static function parseUserAgent()
     {
         $platform = null;
-        $name     = null;
+        $browser  = null;
         $version  = null;
 
         $user_agent = isset($_SERVER['HTTP_USER_AGENT']) ? $_SERVER['HTTP_USER_AGENT'] : null;
@@ -637,7 +582,7 @@ abstract class App
             {
                 if (preg_match('%^(?!Mozilla)(?P<browser>[A-Z0-9\-]+)(/(?P<version>[0-9A-Z.]+))?%ix', $user_agent, $result))
                 {
-                    $name    = $result['browser'];
+                    $browser = $result['browser'];
                     $version = isset($result['version']) ? $result['version'] : null;
                 }
             }
@@ -648,7 +593,7 @@ abstract class App
                     $rv_result = $rv_result['version'];
                 }
 
-                $name = $result['browser'][0];
+                $browser = $result['browser'][0];
 
                 $version = $result['version'][0];
 
@@ -672,19 +617,19 @@ abstract class App
 
                 $ekey = 0;
 
-                if ($name == 'Iceweasel')
+                if ($browser == 'Iceweasel')
                 {
-                    $name = 'Firefox';
+                    $browser = 'Firefox';
                 }
                 elseif ($find('Playstation Vita', $key))
                 {
                     $platform = 'PlayStation Vita';
 
-                    $name = 'Browser';
+                    $browser = 'Browser';
                 }
                 elseif (($find('Kindle Fire', $key)) or ($find('Silk', $key)))
                 {
-                    $name = $result['browser'][$key] == 'Silk' ? 'Silk' : 'Kindle';
+                    $browser = $result['browser'][$key] == 'Silk' ? 'Silk' : 'Kindle';
 
                     $platform = 'Kindle Fire';
 
@@ -695,13 +640,13 @@ abstract class App
                 }
                 elseif (($find('NintendoBrowser', $key)) or ($platform == 'Nintendo 3DS'))
                 {
-                    $name = 'NintendoBrowser';
+                    $browser = 'NintendoBrowser';
 
                     $version = $result['version'][$key];
                 }
                 elseif ($find('Kindle', $key))
                 {
-                    $name  = $result['browser'][$key];
+                    $browser  = $result['browser'][$key];
 
                     $platform = 'Kindle';
 
@@ -709,13 +654,13 @@ abstract class App
                 }
                 elseif ($find('OPR', $key))
                 {
-                    $name = 'Opera Next';
+                    $browser = 'Opera Next';
 
                     $version = $result['version'][$key];
                 }
                 elseif ($find('Opera', $key))
                 {
-                    $name = 'Opera';
+                    $browser = 'Opera';
 
                     $find('Version', $key);
 
@@ -723,17 +668,17 @@ abstract class App
                 }
                 elseif ($find('Midori', $key))
                 {
-                    $name = 'Midori';
+                    $browser = 'Midori';
 
                     $version = $result['version'][$key];
                 }
-                elseif (($name == 'MSIE') or ($rv_result and ($find('Trident', $key))) or ($find('Edge', $ekey)))
+                elseif (($browser == 'MSIE') or ($rv_result and ($find('Trident', $key))) or ($find('Edge', $ekey)))
                 {
-                    $name = 'MSIE';
+                    $browser = 'MSIE';
 
                     if ($find('IEMobile', $key))
                     {
-                        $name = 'IEMobile';
+                        $browser = 'IEMobile';
 
                         $version = $result['version'][$key];
                     }
@@ -748,36 +693,36 @@ abstract class App
 
                     if (version_compare($version, '12', '>='))
                     {
-                        $name = 'Edge';
+                        $browser = 'Edge';
                     }
                 }
                 elseif ($find('Vivaldi', $key))
                 {
-                    $name = 'Vivaldi';
+                    $browser = 'Vivaldi';
 
                     $version = $result['version'][$key];
                 }
                 elseif (($find('Chrome', $key)) or ($find('CriOS', $key)))
                 {
-                    $name = 'Chrome';
+                    $browser = 'Chrome';
 
                     $version = $result['version'][$key];
                 }
-                elseif ($name == 'AppleWebKit')
+                elseif ($browser == 'AppleWebKit')
                 {
                     if (($platform == 'Android') and (!($key = 0)))
                     {
-                        $name = 'Android Browser';
+                        $browser = 'Android Browser';
                     }
                     elseif (strpos($platform, 'BB') === 0)
                     {
-                        $name  = 'BlackBerry Browser';
+                        $browser  = 'BlackBerry Browser';
 
                         $platform = 'BlackBerry';
                     }
                     elseif (($platform == 'BlackBerry') or ($platform == 'PlayBook'))
                     {
-                        $name = 'BlackBerry Browser';
+                        $browser = 'BlackBerry Browser';
                     }
                     elseif ($find('Safari', $key))
                     {
@@ -785,7 +730,7 @@ abstract class App
                     }
                     elseif ($find('TizenBrowser', $key))
                     {
-                        $name = 'TizenBrowser';
+                        $browser = 'TizenBrowser';
                     }
 
                     $find('Version', $key);
@@ -798,7 +743,7 @@ abstract class App
 
                     $platform = 'PlayStation ' . preg_replace('/[^\d]/i', '', $key);
 
-                    $name = 'NetFront';
+                    $browser = 'NetFront';
                 }
             }
         }
@@ -807,7 +752,7 @@ abstract class App
         return array
         (
             'platform' => $platform
-          , 'name'     => $name
+          , 'browser'  => $browser
           , 'version'  => $version
         );
     }
