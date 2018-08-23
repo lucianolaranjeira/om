@@ -5,7 +5,7 @@
  * @package    Om
  * @author     Luciano Laranjeira <inbox@lucianolaranjeira.com>
  * @link       https://github.com/lucianolaranjeira/om
- * @version    Beta 1.0.1 • Tuesday, August 22, 2018
+ * @version    Beta 1.0.2 • Tuesday, August 22, 2018
  */
 
 namespace lib;
@@ -24,63 +24,63 @@ abstract class App
      *
      * @var string $method
      */
-    private static $method;
+    public static $method;
 
     /**
      * HTTP request protocol.
      *
      * @var string $protocol
      */
-    private static $protocol;
+    public static $protocol;
 
     /**
      * HTTP request domain.
      *
      * @var string $domain
      */
-    private static $domain;
+    public static $domain;
 
     /**
      * HTTP request port.
      *
      * @var string $port
      */
-    private static $port;
+    public static $port;
 
     /**
      * HTTP request folder.
      *
      * @var string $folder
      */
-    private static $folder;
+    public static $folder;
 
     /**
      * HTTP request path.
      *
      * @var string $path
      */
-    private static $path;
+    public static $path;
 
     /**
      * HTTP request parameters.
      *
      * @var string $parameters
      */
-    private static $parameters = array();
+    public static $parameters = array();
 
     /**
      * HTTP request base.
      *
      * @var string $base
      */
-    private static $base;
+    public static $base;
 
     /**
      * User agent browser details.
      *
      * @var array $browser
      */
-    private static $browser = array();
+    public static $browser = array();
 
     /**
      * Getting things done.
@@ -534,6 +534,12 @@ abstract class App
      */
     private static function parseUserAgent()
     {
+        // Get IP address.
+
+        $address = $_SERVER['REMOTE_ADDR'];
+
+        // Get browser details.
+
         $platform = null;
         $browser  = null;
         $version  = null;
@@ -751,12 +757,44 @@ abstract class App
         // Return browser details.
         return array
         (
-            'platform' => $platform
+            'address'  => $address
+          , 'platform' => $platform
           , 'browser'  => $browser
           , 'version'  => $version
         );
     }
 
+    /**
+     * Get App details.
+     *
+     * @return string
+     */    
+    public static function details()
+    {
+        return json_encode
+        (
+            array
+            (
+                'method'     => App::$method
+              , 'protocol'   => App::$protocol
+              , 'domain'     => App::$domain
+              , 'port'       => App::$port
+              , 'folder'     => App::$folder
+              , 'path'       => App::$path
+              , 'parameters' => App::$parameters
+              , 'base'       => App::$base
+              , 'browser'    => App::$browser
+            )
+
+          , JSON_PRETTY_PRINT
+        );
+    }
+
+    /**
+     * Register autoload function.
+     *
+     * @return boolean
+     */    
     public static function register()
     {
         return spl_autoload_register

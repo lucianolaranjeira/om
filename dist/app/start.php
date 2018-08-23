@@ -5,7 +5,7 @@
  * @package    Om
  * @author     Luciano Laranjeira <inbox@lucianolaranjeira.com>
  * @link       https://github.com/lucianolaranjeira/om
- * @version    Beta 1.0.0 • Tuesday, August 21, 2018
+ * @version    Beta 1.0.2 • Tuesday, August 22, 2018
  */
 
 /*
@@ -32,12 +32,10 @@ App::run
 
     // Application folder.
 
-  , '/projects/om/'
+  , '/om/'
 
 );
 
 // If any route wasn't found (or didn,t something) this is the right time to say something, isn't?
 
-App::status('404 Not Found');
-
-App::end();
+App::bypass('notfound');

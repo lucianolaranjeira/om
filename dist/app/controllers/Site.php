@@ -5,7 +5,7 @@
  * @package    Om
  * @author     Luciano Laranjeira <inbox@lucianolaranjeira.com>
  * @link       https://github.com/lucianolaranjeira/om
- * @version    Beta 1.0.0 • Tuesday, August 21, 2018
+ * @version    Beta 1.0.2 • Tuesday, August 22, 2018
  */
 
 namespace app\controllers;
@@ -40,6 +40,22 @@ abstract class Site
         App::content('text/html', 'utf-8');
 
         App::load('../app/views/home.phtml');
+
+        App::end();
+    }
+
+    /**
+     * Get app details.
+     *
+     * @return void
+     */
+    public static function details()
+    {
+        App::status('200 OK');
+
+        App::content('text/json', 'utf-8');
+
+        echo App::details();
 
         App::end();
     }
