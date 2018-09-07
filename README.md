@@ -9,12 +9,14 @@ To use:
 
 1 - Download this files;
 
-2 - Create your own routes on ".\dist\app\routes\";
+2 - Create your own routes on "..\app\routes\";
 
-3 - Edit ".\dist\app\start.php";
+3 - Edit "..\app\start.php";
 
-4 - Add your own code on ".\dist\app\".
+4 - Add your own code on "..\app\";
 
-5 - Run (".\dist\" is your target);
+5 - Run it.
 
 Try on localhost first.
+
+For more information, get in touch.
