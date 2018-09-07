@@ -5,7 +5,7 @@
  * @package    Om
  * @author     Luciano Laranjeira <inbox@lucianolaranjeira.com>
  * @link       https://github.com/lucianolaranjeira/om
- * @version    Beta 1.0.2 • Tuesday, August 22, 2018
+ * @version    Beta 1.0.3 • Tuesday, September 7, 2018
  */
 
 /*
@@ -32,10 +32,10 @@ App::run
 
     // Application folder.
 
-  , '/om/'
+  , '/'
 
 );
 
 // If any route wasn't found (or didn,t something) this is the right time to say something, isn't?
 
-App::bypass('notfound');
+App::redirect('301 Permanent Redirect', 'notfound');

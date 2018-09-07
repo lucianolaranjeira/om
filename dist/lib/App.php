@@ -5,7 +5,7 @@
  * @package    Om
  * @author     Luciano Laranjeira <inbox@lucianolaranjeira.com>
  * @link       https://github.com/lucianolaranjeira/om
- * @version    Beta 1.0.2 • Tuesday, August 22, 2018
+ * @version    Beta 1.0.3 • Tuesday, September 7, 2018
  */
 
 namespace lib;
@@ -17,70 +17,91 @@ abstract class App
      *
      * @var string $controllers (namespace)
      */
-    public static $controllers = 'app\controllers';
+    private static $controllers = 'app\controllers';
+
+    /**
+     * The REQUEST follows the structure below:
+     *
+     *              [8]
+     *      |--------------------------------|
+     *   GET http://domain.com:00000/myfolder/user/macgyver?firstname=Angus&lastname=MacGyver
+     *  |---|------|----------|-----|--------|-------------|---------------------------------|
+     *   [1]   [2]     [3]      [4]     [5]        [6]                    [7]
+     *
+     * For example:
+     *
+     *    [1] method     = GET
+     *    [2] protocol   = HTTP
+     *    [3] domain     = domain.com
+     *    [4] port       = 00000
+     *    [5] folder     = /myfolder/
+     *    [6] path       = user/macgyver
+     *    [7] parameters = array('firstname' => 'Angus', 'lastname' => 'MacGyver')
+     *    [8] base       = http://domain.com:00000/myfolder/
+     */
 
     /**
      * HTTP request method.
      *
      * @var string $method
      */
-    public static $method;
+    private static $method;
 
     /**
      * HTTP request protocol.
      *
      * @var string $protocol
      */
-    public static $protocol;
+    private static $protocol;
 
     /**
      * HTTP request domain.
      *
      * @var string $domain
      */
-    public static $domain;
+    private static $domain;
 
     /**
      * HTTP request port.
      *
      * @var string $port
      */
-    public static $port;
+    private static $port;
 
     /**
      * HTTP request folder.
      *
      * @var string $folder
      */
-    public static $folder;
+    private static $folder = '/';
 
     /**
      * HTTP request path.
      *
      * @var string $path
      */
-    public static $path;
+    private static $path;
 
     /**
      * HTTP request parameters.
      *
      * @var string $parameters
      */
-    public static $parameters = array();
+    private static $parameters = array();
 
     /**
      * HTTP request base.
      *
      * @var string $base
      */
-    public static $base;
+    private static $base;
 
     /**
      * User agent browser details.
      *
      * @var array $browser
      */
-    public static $browser = array();
+    private static $browser = array();
 
     /**
      * Getting things done.
@@ -92,131 +113,41 @@ abstract class App
      */
     public static function run(array $routes, $folder = '/')
     {
+        // Set app folder.
 
-        /**
-         * The REQUEST follows the structure below:
-         *
-         *              [8]
-         *      |--------------------------------|
-         *   GET http://domain.com:00000/myfolder/user/macgyver?firstname=Angus&lastname=MacGyver
-         *  |---|------|----------|-----|--------|-------------|---------------------------------|
-         *   [1]   [2]     [3]      [4]     [5]        [6]                    [7]
-         *
-         * For example:
-         *
-         *    [1] method     = GET
-         *    [2] protocol   = HTTP
-         *    [3] domain     = domain.com
-         *    [4] port       = 00000
-         *    [5] folder     = /myfolder/
-         *    [6] path       = user/macgyver
-         *    [7] parameters = array('firstname' => 'Angus', 'lastname' => 'MacGyver')
-         *    [8] base       = http://domain.com:00000/myfolder/
-         */
+        App::setFolder($folder);
 
-        // Set app folder..
+        // Set app request method.
 
-        App::$folder = $folder;
+        App::setMethod();
 
-        // Get HTTP request method.
+        // Set app request protocol.
 
-        $method = $_SERVER['REQUEST_METHOD'];
+        App::setProtocol();
 
-        if (($method == 'POST') and (array_key_exists('HTTP_X_HTTP_METHOD', $_SERVER)))
-        {
-            if ($_SERVER['HTTP_X_HTTP_METHOD'] == 'DELETE')
-            {
-                $method = 'DELETE';
-            }
-            else if ($_SERVER['HTTP_X_HTTP_METHOD'] == 'PUT')
-            {
-                $method = 'PUT';
-            }
-            else
-            {
-                $method = null;
-            }
-        }
+        // Set app request domain.
 
-        App::$method = $method;
+        App::setDomain();
 
-        // Get HTTP request protocol.
+        // Set app request port.
 
-        App::$protocol = $_SERVER['REQUEST_SCHEME'];
+        App::setPort();
 
-        // Get HTTP request domain.
+        // Set app request path.
 
-        App::$domain = $_SERVER['SERVER_NAME'];
+        App::setPath();
 
-        // Get HTTP request port.
+        // Set app request parameters.
 
-        App::$port = $_SERVER['SERVER_PORT'];
+        App::setParameters();
 
-        // Get HTTP request path.
+        // Set app request base.
 
-        $path = $_SERVER['REQUEST_URI'];
+        App::setBase();
 
-        if (isset($_SERVER['QUERY_STRING']))
-        {
-            $query_string = $_SERVER['QUERY_STRING'];
+        // Set app request browser.
 
-            if ($query_string)
-            {
-                if (!($query_string[0] === '?'))
-                {
-                    $query_string = '?' . $query_string;
-                }
-
-                $path = rtrim($path, $query_string);
-            }
-        }
-
-        $path = trim(substr($path, strlen(App::$folder)), '/');
-
-        App::$path = $path;
-
-        // Get HTTP request parameters.
-
-        $parameters = array();
-
-        switch(App::$method)
-        {
-            case 'GET':
-
-                $parameters = $_GET;
-
-                break;
-
-            case 'POST':
-
-                $parameters = $_POST;
-
-                break;
-
-            case 'PUT':
-
-                $parameters = App::parseInputFile();
-
-                break;
-
-            default:
-
-                // nevermind.
-
-                $parameters = null;
-
-                break;
-        }
-
-        App::$parameters = $parameters;
-
-        // Get HTTP request base.
-
-        App::$base = App::$protocol . '://' . App::$domain . ':' . App::$port . App::$folder;
-
-        // Get user agent browser details.
-
-        App::$browser = App::parseUserAgent();
+        App::setBrowser();
 
         // Include routes files.
 
@@ -227,6 +158,278 @@ abstract class App
                 include $route;
             }
         }
+    }
+
+    /**
+     * Set App folder.
+     *
+     * @param string $folder (optional)
+     *
+     * @return string
+     */
+    private static function setFolder($folder = '/')
+    {
+        App::$folder = $folder;
+    }
+
+    /**
+     * Set App method.
+     *
+     * @param string $method
+     *
+     * @return string
+     */
+    private static function setMethod($method = null)
+    {
+        if ($method)
+        {
+            $_method = $method;
+        }
+        else
+        {
+            // Get HTTP request method.
+
+            $_method = $_SERVER['REQUEST_METHOD'];
+
+            if (($_method == 'POST') and (array_key_exists('HTTP_X_HTTP_METHOD', $_SERVER)))
+            {
+                if ($_SERVER['HTTP_X_HTTP_METHOD'] == 'DELETE')
+                {
+                    $_method = 'DELETE';
+                }
+                else if ($_SERVER['HTTP_X_HTTP_METHOD'] == 'PUT')
+                {
+                    $_method = 'PUT';
+                }
+                else
+                {
+                    $_method = null;
+                }
+            }
+        }
+
+        App::$method = $_method;
+
+        return App::$method;
+    }
+
+    /**
+     * Set App protocol.
+     *
+     * @param string $protocol (optional)
+     *
+     * @return string
+     */
+    private static function setProtocol($protocol = null)
+    {
+        if ($protocol)
+        {
+            $_protocol = $protocol;
+        }
+        else
+        {
+            // Get HTTP request protocol.
+
+            $_protocol = $_SERVER['REQUEST_SCHEME'];
+        }
+
+        App::$protocol = $_protocol;
+
+        return App::$protocol;
+    }
+
+    /**
+     * Set App domain.
+     *
+     * @param string $domain (optional)
+     *
+     * @return string
+     */
+    private static function setDomain($domain = null)
+    {
+        if ($domain)
+        {
+            $_domain = $domain;
+        }
+        else
+        {
+            // Get HTTP request domain.
+
+            $_domain = $_SERVER['SERVER_NAME'];
+        }
+
+        App::$domain = $_domain;
+
+        return App::$domain;
+    }
+
+    /**
+     * Set App port.
+     *
+     * @param string $port (optional)
+     *
+     * @return string
+     */
+    private static function setPort($port = null)
+    {
+        if ($port)
+        {
+            $_port = $port;
+        }
+        else
+        {
+            // Get HTTP request port.
+
+            $_port = $_SERVER['SERVER_PORT'];
+        }
+
+        App::$port = $_port;
+
+        return App::$port;
+    }
+
+    /**
+     * Set App path.
+     *
+     * @param string $path (optional)
+     *
+     * @return string
+     */
+    private static function setPath($path = null)
+    {
+        if ($path)
+        {
+            $_path = $path;
+        }
+        else
+        {
+            // Get HTTP request path.
+
+            $_path = $_SERVER['REQUEST_URI'];
+
+            if (isset($_SERVER['QUERY_STRING']))
+            {
+                $query_string = $_SERVER['QUERY_STRING'];
+
+                if ($query_string)
+                {
+                    if (!($query_string[0] === '?'))
+                    {
+                        $query_string = '?' . $query_string;
+                    }
+
+                    $_path = rtrim($_path, $query_string);
+                }
+            }
+
+            $_path = trim(substr($_path, strlen(App::$folder)), '/');
+        }
+
+        App::$path = $_path;
+
+        return App::$path;
+    }
+
+    /**
+     * Set App parameters.
+     *
+     * @param array $parameters (optional)
+     *
+     * @return array
+     */
+    private static function setParameters(array $parameters = null)
+    {
+        if ($parameters)
+        {
+            $_parameters = $parameters;
+        }
+        else
+        {
+            // Get HTTP request parameters.
+
+            switch(App::$method)
+            {
+                case 'GET':
+
+                    $_parameters = $_GET;
+
+                    break;
+
+                case 'POST':
+
+                    $_parameters = $_POST;
+
+                    break;
+
+                case 'PUT':
+
+                    $_parameters = App::parseInputFile();
+
+                    break;
+
+                default:
+
+                    // nevermind.
+
+                    $_parameters = array();
+
+                    break;
+            }
+        }
+
+        App::$parameters = $_parameters;
+
+        return App::$parameters;
+    }
+
+    /**
+     * Set App base.
+     *
+     * @param string $base (optional)
+     *
+     * @return string
+     */
+    private static function setBase($base = null)
+    {
+        if ($base)
+        {
+            $_base = $base;
+        }
+        else
+        {
+            // Get HTTP request base.
+
+            $_base = App::$protocol . '://' . App::$domain . ':' . App::$port . App::$folder;
+        }
+
+        App::$base = $_base;
+
+        return App::$base;
+    }
+
+    /**
+     * Set App browser.
+     *
+     * @param array $browser (optional)
+     *
+     * @return string
+     */
+    private static function setBrowser(array $browser = null)
+    {
+        if ($browser)
+        {
+            $_browser = $browser;
+        }
+        else
+        {
+            // Get user agent browser details.
+
+            $_browser = App::parseUserAgent();
+        }
+
+        App::$browser = $_browser;
+
+        return App::$browser;
     }
 
     /**
@@ -245,76 +448,118 @@ abstract class App
      *         [user_id] => macgyver
      *     )
      *
+     * @param string $visibility
      * @param string $method
      * @param string $route
      * @param string|callable $callback (optional)
      *
      * @return mixed
      */
-    public static function match($method, $route, $callback = null)
+    public static function match($visibility, $method, $route, $callback = null)
     {
+        // Check the requested method...
+
         if (App::$method === $method)
         {
-            /*
-             * The regex \{(.*?)\} will find...
-             * 
-             *   ex:
-             *
-             *     user/{$user}
-             *         |-------| <-- found this...
-             * 
-             *     $variables will contain:
-             *
-             *       array
-             *       (
-             *           [0] => {$user}
-             *           [1] => $user
-             *       )
-             */
+            // Check visibility and do sometyhing (or not) about access and/or authentication...
 
-            preg_match_all('/\{(.*?)\}/', $route, $variables);
-
-            // match...
-
-            $path = explode('/', App::$path);
-
-            $route = explode('/', $route);
-
-            if (count($path) == count($route))
+            switch($visibility)
             {
-                $route_variables = array();
+                case 'PUBLIC':
 
-                foreach ($route as $key => $value)
+                    $authorized = true;
+
+                    break;
+
+                case 'PRIVATE':
+
+                    // Here, use some kind of authentication algorithm.
+
+                    $authorized = false;
+
+                    break;
+
+                case 'BLOCKED':
+
+                    $authorized = false;
+
+                    break;
+
+                default:
+
+                    // Never trust if the visibility wasn't defined.
+
+                    $authorized = false;
+
+                    break;
+            }
+
+            // If access granted, try match the route...
+
+            if ($authorized)
+            {
+                /*
+                 * The regex \{(.*?)\} will find...
+                 * 
+                 *   ex:
+                 *
+                 *     user/{$user}
+                 *         |-------| <-- found this...
+                 * 
+                 *     $variables will contain:
+                 *
+                 *       array
+                 *       (
+                 *           [0] => {$user}
+                 *           [1] => $user
+                 *       )
+                 */
+
+                preg_match_all('/\{(.*?)\}/', $route, $variables);
+
+                // match...
+
+                $path = explode('/', App::$path);
+
+                $route = explode('/', $route);
+
+                if (count($path) == count($route))
                 {
-                    if (in_array($value, $variables[0]))
-                    {
-                        $route_variables[trim($value, '{}')] = $path[$key];
+                    $route_variables = array();
 
-                        $path[$key] = $value;
-                    }
-                }
-
-                if ($path === $route)
-                {
-                    if ($callback)
+                    foreach ($route as $key => $value)
                     {
-                        // Callback is an explicit function or method.
-                        if (is_callable($callback))
+                        if (in_array($value, $variables[0]))
                         {
-                            return call_user_func_array($callback, $route_variables);
+                            $route_variables[trim($value, '{}')] = $path[$key];
+
+                            $path[$key] = $value;
+                        }
+                    }
+
+                    if ($path === $route)
+                    {
+                        if ($callback)
+                        {
+                            // Callback is an explicit function or method.
+
+                            if (is_callable($callback))
+                            {
+                                return call_user_func_array($callback, $route_variables);
+                            }
+
+                            // For an implicit method, try callback as a controller method.
+
+                            $controller = App::$controllers . '\\' .  $callback;
+
+                            if (is_callable($controller))
+                            {
+                                return call_user_func_array($controller, $route_variables);
+                            }
                         }
 
-                        // For an implicit method, try callback as a controller method.
-
-                        $controller = App::$controllers . '\\' .  $callback;
-
-                        if (is_callable($controller))
-                        {
-                            return call_user_func_array($controller, $route_variables);
-                        }
+                        return true;
                     }
-
-                    return true;
                 }
             }
         }
@@ -323,15 +568,18 @@ abstract class App
     }
 
     /**
-     * Set HTTP response status.
+     * App response.
      *
      * @param string $status
+     * @param array $mime
+     * @param array $charset
+     * @param string $filename (optional)
+     * @param array $variables (optional)
      *
      * @return void
      */
-    public static function status($status = '200 OK')
+    public static function response($status, $mime, $charset, $filename = null, array $variables = null)
     {
-
         /*
          * Status code registry, see the IANA list:
          *
@@ -343,18 +591,7 @@ abstract class App
          */
 
         header('HTTP/1.1 ' . $status);
-    }
 
-    /**
-     * Set HTTP response content type and charset.
-     *
-     * @param array $mime
-     * @param array $charset (optional, default utf-8)
-     *
-     * @return void
-     */
-    public static function content($mime, $charset = 'utf-8')
-    {
         /*
          * Media types (MIME), see IANA list:
          *
@@ -362,13 +599,20 @@ abstract class App
          */
 
         header('Content-Type: ' . $mime . '; charset=' . $charset);
+
+        // Load content...
+
+        if ($filename)
+        {
+            App::load($filename, $variables);
+        }
     }
 
     /**
      * Load a file content.
      *
-     * @param  string $filename
-     * @param  array $variables (optional)
+     * @param string $filename
+     * @param array $variables (optional)
      *
      * @return boolean
      */
@@ -392,28 +636,37 @@ abstract class App
     /**
      * Go to another place.
      *
+     * @param string $status
      * @param string $url
      *
      * @return void
      */
-    public static function redirect($url)
+    public static function redirect($status, $url)
     {
+        // If is not a valid URL, it's supposed to be a internal route, so just try it.
+
+        if (!filter_var($url, FILTER_VALIDATE_URL))
+        {
+            $url = App::$base . $url;
+        }
+
+        /*
+         * Status code registry, see the IANA list:
+         *
+         *    https://www.iana.org/assignments/http-status-codes/http-status-codes.xhtml
+         *
+         * Good view, see this diagram:
+         *
+         *    https://github.com/for-GET/http-decision-diagram/blob/master/doc/README.md
+         */
+
+        header('HTTP/1.1 ' . $status);
+
+        // Go...
+
         header('Location: ' . $url);
     }
 
-    /**
-     * Bypass to an internal route.
-     *
-     * @param string $path
-     *
-     * @return void
-     */
-    public static function bypass($path)
-    {
-        $url = App::$base . $path;
-
-        App::redirect($url);
-    }
 
     /**
      * All done.
