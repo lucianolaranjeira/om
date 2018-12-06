@@ -5,50 +5,44 @@
  * @package    Om
  * @author     Luciano Laranjeira <inbox@lucianolaranjeira.com>
  * @link       https://github.com/lucianolaranjeira/om
- * @version    Beta 1.0.3 • Friday, September 7, 2018
+ * @version    Beta 2.0.0 • Thursday, December 6, 2018
  */
 
 use lib\App;
 
-// Home.
+// Not Found (page). IMPORTANT! Never ever forget this route.
 
 App::match
 (
-    'PUBLIC', 'GET', ''
+    'GET', 'PUBLIC', 'notfound'
+
+  , function()
+    {
+        App::response('404 Not Found', 'text/html', 'utf-8', '../app/interface/notfound.phtml');
+    }
+);
+
+// Index.
+
+App::match
+(
+    'GET', 'PUBLIC', ''
 
   , function()
     {
         App::redirect('301 Permanent Redirect', 'home');
-
-        App::end();
     }
 );
 
-App::match
-(
-    'PUBLIC', 'GET', 'home'
-
-  , function()
-    {
-        App::response('200 OK', 'text/html', 'utf-8', '../app/views/home.phtml');
-
-        App::end();
-    }
-);
-
-// App details.
+// Home (page).
 
 App::match
 (
-    'PRIVATE', 'GET', 'details'
+    'GET', 'PUBLIC', 'home'
 
   , function()
     {
-        App::response('200 OK', 'text/json', 'utf-8');
-
-        echo App::details();
-
-        App::end();
+        App::response('200 OK', 'text/html', 'utf-8', '../app/interface/home.phtml');
     }
 );
 
@@ -56,35 +50,10 @@ App::match
 
 App::match
 (
-    'PUBLIC', 'GET', 'github'
+    'GET', 'PUBLIC', 'github'
 
   , function()
     {
         App::redirect('301 Permanent Redirect', 'https://github.com/lucianolaranjeira/om');
-
-        App::end();
-    }
-);
-
-// Just a secret.
-
-App::match
-(
-    'BLOCKED', 'GET', 'secret'
-
-  , 'Site::secret'
-);
-
-// Not Found.
-
-App::match
-(
-    'PUBLIC', 'GET', 'notfound'
-
-  , function()
-    {
-        App::response('200 OK', 'text/html', 'utf-8', '../app/views/notfound.phtml');
-
-        App::end();
     }
 );

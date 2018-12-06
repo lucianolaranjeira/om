@@ -1,29 +1,24 @@
 <?php
 /**
- * .\app\index.php
+ * .\app\start.php
  *
  * @package    Om
  * @author     Luciano Laranjeira <inbox@lucianolaranjeira.com>
  * @link       https://github.com/lucianolaranjeira/om
- * @version    Beta 1.0.3 • Friday, September 7, 2018
+ * @version    Beta 2.0.0 • Thursday, December 6, 2018
  */
 
-/*
- |--------------------------------------------------------------------------
- | Let's get our hands dirty!
- |--------------------------------------------------------------------------
- |
- | Hey Dorothy! Show me the yellow brick road.
- |
- */
+// Let's get our hands dirty!
 
-require '../lib/App.php';
+require '../lib/Autoload.php';
 
-use lib\app;
+// Hey Dorothy! Show me the yellow brick road.
+
+use lib\App;
 
 App::run
 (
-    // Routes (files).
+    // Routes.
 
     array
     (
@@ -36,6 +31,9 @@ App::run
 
 );
 
-// If any route wasn't found (or didn,t something) this is the right time to say something, isn't?
+// If a route wasn't found this is the right time to say something, isn't?
 
-App::redirect('301 Permanent Redirect', 'notfound');
+if (!App::$route)
+{
+    App::redirect('301 Permanent Redirect', 'notfound');
+}
