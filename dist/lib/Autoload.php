@@ -5,7 +5,7 @@
  * @package    Om
  * @author     Luciano Laranjeira <inbox@lucianolaranjeira.com>
  * @link       https://github.com/lucianolaranjeira/om
- * @version    Beta 2.0.0 • Thursday, December 6, 2018
+ * @version    Beta 2.2.0 • Wednesday, December 12, 2018
  */
 
 namespace lib;

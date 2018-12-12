@@ -5,7 +5,7 @@
  * @package    Om
  * @author     Luciano Laranjeira <inbox@lucianolaranjeira.com>
  * @link       https://github.com/lucianolaranjeira/om
- * @version    Beta 2.0.0 • Thursday, December 6, 2018
+ * @version    Beta 2.2.0 • Wednesday, December 12, 2018
  */
 
 namespace lib;
@@ -13,32 +13,25 @@ namespace lib;
 abstract class App
 {
     /**
-     * Folder application root.
-     *
-     * @var string $folder
-     */
-    public static $folder = '/';
-
-    /**
-     * Found route.
+     * The route that was matched.
      *
      * @var string $route
      */
     public static $route;
 
     /**
-     * Getting things done.
+     * Hey! Ho! Let's go!.
      *
-     * @param array  $routes
-     * @param string $folder (optional)
+     * @param array $routes
+     * @param array $folder (optional)
      *
      * @return void
      */
     public static function run(array $routes, $folder = '/')
     {
-        // Set app folder.
+        // Application folder.
 
-        App::$folder = $folder;
+        Request::$folder = $folder;
 
         // Include routes...
 
@@ -130,20 +123,20 @@ abstract class App
                     if (count($path_slices) == count($route_slices))
                     {
                         /*
-                         * The regex \{(.*?)\} will find...
-                         * 
-                         *   ex:
-                         *
-                         *     user/{$user}
-                         *         |-------| <-- found this...
-                         * 
-                         *     $variables will contain:
-                         *
-                         *       array
-                         *       (
-                         *           [0] => {$user}
-                         *           [1] => $user
-                         *       )
+                           The regex \{(.*?)\} will find...
+                           
+                             ex:
+                          
+                               user/{$user}
+                                   |-------| <-- found this...
+                           
+                               $variables will contain:
+                          
+                                 array
+                                 (
+                                     [0] => {$user}
+                                     [1] => $user
+                                 )
                          */
 
                         preg_match_all('/\{(.*?)\}/', $route, $variables);
@@ -184,44 +177,24 @@ abstract class App
     }
 
     /**
-     * App response.
+     * Go to another place.
      *
-     * @param string $status
-     * @param array  $mime
-     * @param array  $charset
-     * @param string $filename  (optional)
-     * @param array  $variables (optional)
+     * @param string $url
      *
      * @return void
      */
-    public static function response($status, $mime, $charset, $filename = null, array $variables = null)
+    public static function redirect($url)
     {
-        /*
-         * Status code registry, see the IANA list:
-         *
-         *    https://www.iana.org/assignments/http-status-codes/http-status-codes.xhtml
-         *
-         * Good view, see this diagram:
-         *
-         *    https://github.com/for-GET/http-decision-diagram/blob/master/doc/README.md
-         */
+        // If is not a valid URL, It's supposed to be an internal route, so just try it.
 
-        header('HTTP/1.1 ' . $status);
-
-        /*
-         * Media types (MIME), see IANA list:
-         *
-         *   https://www.iana.org/assignments/media-types/media-types.xhtml
-         */
-
-        header('Content-Type: ' . $mime . '; charset=' . $charset);
-
-        // Load content...
-
-        if ($filename)
+        if (!filter_var($url, FILTER_VALIDATE_URL))
         {
-            App::load($filename, $variables);
+            $url = Request::base() . $url;
         }
+
+        // Go...
+
+        header('Location: ' . $url);
     }
 
     /**
@@ -243,51 +216,5 @@ abstract class App
 
             include $filename;
         }
-    }
-
-    /**
-     * Site URL.
-     *
-     * @var string $path (optional)
-     *
-     * @return string
-     */
-    public static function url($path = null)
-    {
-        return Request::base() . $path;
-    }
-
-    /**
-     * Go to another place.
-     *
-     * @param string $status
-     * @param string $url
-     *
-     * @return void
-     */
-    public static function redirect($status, $url)
-    {
-        // If is not a valid URL, It's supposed to be an internal route, so just try it.
-
-        if (!filter_var($url, FILTER_VALIDATE_URL))
-        {
-            $url = App::url($url);
-        }
-
-        /*
-         * Status code registry, see the IANA list:
-         *
-         *    https://www.iana.org/assignments/http-status-codes/http-status-codes.xhtml
-         *
-         * Good view, see this diagram:
-         *
-         *    https://github.com/for-GET/http-decision-diagram/blob/master/doc/README.md
-         */
-
-        header('HTTP/1.1 ' . $status);
-
-        // Go...
-
-        header('Location: ' . $url);
     }
 }

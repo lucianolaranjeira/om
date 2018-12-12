@@ -5,7 +5,7 @@
  * @package    Om
  * @author     Luciano Laranjeira <inbox@lucianolaranjeira.com>
  * @link       https://github.com/lucianolaranjeira/om
- * @version    Beta 2.0.0 • Thursday, December 6, 2018
+ * @version    Beta 2.2.0 • Wednesday, December 12, 2018
  */
 
 use lib\App;
@@ -18,7 +18,11 @@ App::match
 
   , function()
     {
-        App::response('404 Not Found', 'text/html', 'utf-8', '../app/interface/notfound.phtml');
+        Response::status('404 Not Found');
+
+        Response::content('text/html', 'utf-8');
+
+        App::load('../app/interface/notfound.phtml');
     }
 );
 
@@ -30,7 +34,9 @@ App::match
 
   , function()
     {
-        App::redirect('301 Permanent Redirect', 'home');
+        Response::status('308 Permanent Redirect');
+
+        App::redirect('home');
     }
 );
 
@@ -42,7 +48,11 @@ App::match
 
   , function()
     {
-        App::response('200 OK', 'text/html', 'utf-8', '../app/interface/home.phtml');
+        Response::status('200 OK');
+
+        Response::content('text/html', 'utf-8');
+
+        App::load('../app/interface/home.phtml');
     }
 );
 
@@ -54,6 +64,8 @@ App::match
 
   , function()
     {
-        App::redirect('301 Permanent Redirect', 'https://github.com/lucianolaranjeira/om');
+        Response::status('308 Permanent Redirect');
+
+        App::redirect('https://github.com/lucianolaranjeira/om');
     }
 );

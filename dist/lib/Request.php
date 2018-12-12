@@ -5,7 +5,7 @@
  * @package    Om
  * @author     Luciano Laranjeira <inbox@lucianolaranjeira.com>
  * @link       https://github.com/lucianolaranjeira/om
- * @version    Beta 2.0.0 • Thursday, December 6, 2018
+ * @version    Beta 2.2.0 • Wednesday, December 12, 2018
  */
 
 namespace lib;
@@ -29,6 +29,13 @@ abstract class Request
      *    [6] path         = user/macgyver
      *    [7] parameters   = array('firstname' => 'Angus', 'lastname' => 'MacGyver')
      */
+
+    /**
+     * Application folder.
+     *
+     * @var string $folder
+     */
+    public static $folder = '/';
 
     /**
      * Get IP address.
@@ -148,7 +155,7 @@ abstract class Request
      */
     public static function path()
     {
-        return trim(substr(parse_url($_SERVER['REQUEST_URI'], PHP_URL_PATH), strlen(App::$folder)), '/');
+        return trim(substr(parse_url($_SERVER['REQUEST_URI'], PHP_URL_PATH), strlen(Request::$folder)), '/');
     }
 
     /**
@@ -167,7 +174,7 @@ abstract class Request
             $base .= ':' . $port;
         }
 
-        return $base . App::$folder;
+        return $base . Request::$folder;
     }
 
     /**

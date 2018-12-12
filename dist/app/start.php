@@ -5,14 +5,12 @@
  * @package    Om
  * @author     Luciano Laranjeira <inbox@lucianolaranjeira.com>
  * @link       https://github.com/lucianolaranjeira/om
- * @version    Beta 2.0.0 • Thursday, December 6, 2018
+ * @version    Beta 2.2.0 • Wednesday, December 12, 2018
  */
 
-// Let's get our hands dirty!
+// Okay, Dorothy, let's get our hands dirty... so show me the yellow brick road!
 
 require '../lib/Autoload.php';
-
-// Hey Dorothy! Show me the yellow brick road.
 
 use lib\App;
 
@@ -28,12 +26,13 @@ App::run
     // Application folder.
 
   , '/'
-
 );
 
 // If a route wasn't found this is the right time to say something, isn't?
 
 if (!App::$route)
 {
-    App::redirect('301 Permanent Redirect', 'notfound');
+    Response::status('308 Permanent Redirect');
+
+    App::redirect('notfound');
 }
