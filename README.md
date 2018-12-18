@@ -29,18 +29,14 @@ To help you to build assets for your OM website, use the gulp folder (if you don
 1 - Install the node modules (node.js is required):
 
 ```
-
 npm install
-
 
 ```
 
 2 - List the gulp tasks:
 
 ```
-
 gulp
-
 
 ```
 
