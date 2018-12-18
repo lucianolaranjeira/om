@@ -2,10 +2,10 @@
 /**
  * .\app\start.php
  *
- * @package    Om
+ * @package    OM
  * @author     Luciano Laranjeira <inbox@lucianolaranjeira.com>
  * @link       https://github.com/lucianolaranjeira/om
- * @version    Beta 2.2.0 • Wednesday, December 12, 2018
+ * @version    Beta 2.3.1 • Tuesday, December 18, 2018
  */
 
 // Okay, Dorothy, let's get our hands dirty... so show me the yellow brick road!

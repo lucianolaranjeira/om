@@ -1,7 +1,7 @@
 {
-    "name": "Om",
-    "version": "2.3.0",
-    "description": "Om is a micro PHP router for web development.",
+    "name": "OM",
+    "version": "2.3.1",
+    "description": "OM is a micro PHP router for web development.",
     "main": "index.js",
     "scripts": {
         "test": "echo \"Error: no test specified\" && exit 1"
