@@ -15,6 +15,19 @@ To use:
 
 4 - Add your own code on "..\app\" folder;
 
-5 - Run it. Try on localhost first.
-
 For more information, get in touch.
+
+# Gulp
+To help you to build assets for your Om website, use the gulp folder (if you don't wanna use it, just delete these folder):
+
+```
+
+// install the node modules (node.js is required):
+
+npm install
+
+// list the gulp tasks:
+
+gulp
+
+```
