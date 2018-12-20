@@ -158,10 +158,10 @@ So here are some files to help you to do this small work.
         - :open_file_folder:scripts
           - :page_facing_up:home.js
           - :page_facing_up:notfound.js
-      - :open_file_folder:  styles
-        - :page_facing_up:home.css
-        - :page_facing_up:notfound.css
-      - :page_facing_up:index.php
+        - :open_file_folder:  styles
+          - :page_facing_up:home.css
+          - :page_facing_up:notfound.css
+        - :page_facing_up:index.php
 
 Your website will be inside the "dist" folder. To use:
 
