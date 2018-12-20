@@ -9,7 +9,7 @@ Sometimes you want to built really small PHP websites and/or webservices (API) u
 
 Examples:
 
-```
+```php
 
 // Example 1
 
