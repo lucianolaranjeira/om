@@ -9,6 +9,8 @@ Sometimes you want to built really small PHP websites and/or webservices (API) u
 
 ## Routing examples
 
+Here are some examples of what you can do using OM:
+
 ```php
 
 // Example 1
