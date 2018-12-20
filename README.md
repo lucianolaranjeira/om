@@ -151,11 +151,11 @@ So here are some files to help you to do this small work.
           - :page_facing_up:home.js (*your code, development*)
           - :page_facing_up:notfound.js (*your code, development*)
       - :open_file_folder:lib
-        - :page_facing_up:Autoload.php (*don't touch)
-        - :page_facing_up:File.php (*don't touch)
-        - :page_facing_up:Request,php (*don't touch)
-        - :page_facing_up:Response.php (*don't touch)
-        - :page_facing_up:Route.php (*don't touch)
+        - :page_facing_up:Autoload.php (*don't touch*)
+        - :page_facing_up:File.php (*don't touch*)
+        - :page_facing_up:Request,php (*don't touch*)
+        - :page_facing_up:Response.php (*don't touch*)
+        - :page_facing_up:Route.php (*don't touch*)
       - :open_file_folder:public
         - :open_file_folder:scripts
           - :page_facing_up:home.js (*your code, production*)
@@ -163,7 +163,7 @@ So here are some files to help you to do this small work.
         - :open_file_folder:  styles
           - :page_facing_up:home.css (*your code, production*)
           - :page_facing_up:notfound.css (*your code, production*)
-        - :page_facing_up:index.php (*don't touch)
+        - :page_facing_up:index.php (*don't touch*)
 
 Your website will be inside the "dist" folder. To use:
 
