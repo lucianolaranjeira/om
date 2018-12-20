@@ -138,32 +138,32 @@ So here are some files to help you to do this small work.
     - :open_file_folder:dist
       - :open_file_folder:app
         - :open_file_folder:interface
-          - :page_facing_up:home.phtml
-          - :page_facing_up:notfound.phtml
+          - :page_facing_up:home.phtml (*your code*)
+          - :page_facing_up:notfound.phtml (*your code*)
         - :open_file_folder:routes
-          - :page_facing_up:site.php
-        - :page_facing_up:start.php
+          - :page_facing_up:site.php (*your code*)
+        - :page_facing_up:start.php (*setup + your code*)
       - :open_file_folder:assets
         - :open_file_folder:less
-          - :page_facing_up:home.less
-          - :page_facing_up:notfound.less
+          - :page_facing_up:home.less (*your code, development*)
+          - :page_facing_up:notfound.less (*your code, development*)
         - :open_file_folder:js
-          - :page_facing_up:home.js
-          - :page_facing_up:notfound.js
+          - :page_facing_up:home.js (*your code, development*)
+          - :page_facing_up:notfound.js (*your code, development*)
       - :open_file_folder:lib
-        - :page_facing_up:Autoload.php
-        - :page_facing_up:File.php
-        - :page_facing_up:Request,php
-        - :page_facing_up:Response.php
-        - :page_facing_up:Route.php
+        - :page_facing_up:Autoload.php (*don't touch)
+        - :page_facing_up:File.php (*don't touch)
+        - :page_facing_up:Request,php (*don't touch)
+        - :page_facing_up:Response.php (*don't touch)
+        - :page_facing_up:Route.php (*don't touch)
       - :open_file_folder:public
         - :open_file_folder:scripts
-          - :page_facing_up:home.js
-          - :page_facing_up:notfound.js
+          - :page_facing_up:home.js (*your code, production*)
+          - :page_facing_up:notfound.js (*your code, production*)
         - :open_file_folder:  styles
-          - :page_facing_up:home.css
-          - :page_facing_up:notfound.css
-        - :page_facing_up:index.php
+          - :page_facing_up:home.css (*your code, production*)
+          - :page_facing_up:notfound.css (*your code, production*)
+        - :page_facing_up:index.php (*don't touch)
 
 Your website will be inside the "dist" folder. To use:
 
