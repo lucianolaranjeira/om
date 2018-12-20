@@ -5,34 +5,22 @@
  * @package    OM
  * @author     Luciano Laranjeira <inbox@lucianolaranjeira.com>
  * @link       https://github.com/lucianolaranjeira/om
- * @version    Beta 2.3.1 • Tuesday, December 18, 2018
+ * @version    Beta 2.4.0 • Wednesday, December 19, 2018
  */
 
 // Okay, Dorothy, let's get our hands dirty... so show me the yellow brick road!
 
 require '../lib/Autoload.php';
 
-use lib\App;
+use lib\Request;
+use lib\Response;
 
-App::run
-(
-    // Routes.
+// Routes.
 
-    array
-    (
-        '../app/routes/site.php'
-    )
-
-    // Application folder.
-
-  , '/'
-);
+include '../app/routes/site.php';
 
 // If a route wasn't found this is the right time to say something, isn't?
 
-if (!App::$route)
-{
-    Response::status('308 Permanent Redirect');
+Response::status('308 Permanent Redirect');
 
-    App::redirect('notfound');
-}
+Request::redirect('notfound');

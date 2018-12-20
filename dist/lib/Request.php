@@ -5,7 +5,7 @@
  * @package    OM
  * @author     Luciano Laranjeira <inbox@lucianolaranjeira.com>
  * @link       https://github.com/lucianolaranjeira/om
- * @version    Beta 2.3.1 • Tuesday, December 18, 2018
+ * @version    Beta 2.4.0 • Wednesday, December 19, 2018
  */
 
 namespace lib;
@@ -38,6 +38,27 @@ abstract class Request
     public static $folder = '/';
 
     /**
+     * Go to another place.
+     *
+     * @param string $url
+     *
+     * @return void
+     */
+    public static function redirect($url)
+    {
+        // If is not a valid URL, It's supposed to be an internal route, so just try it.
+
+        if (!filter_var($url, FILTER_VALIDATE_URL))
+        {
+            $url = Request::base() . $url;
+        }
+
+        // Go...
+
+        header('Location: ' . $url);
+    }
+
+    /**
      * Get IP address.
      *
      * @return string
@@ -55,39 +76,6 @@ abstract class Request
     public static function ua()
     {
         return $_SERVER['HTTP_USER_AGENT'];
-    }
-
-    /**
-     * Parse the user agent string to get the client screen (mobile, tablet, desktop, etc).
-     *
-     * @return string
-     */
-    public static function screen()
-    {
-        $ua = Request::ua();
-
-        // Look for tablets first...
-
-        if (preg_match('/(tablet|ipad|playbook|silk)|(android(?!.*mobile))/i', $ua))
-        {
-            $screen = 'tablet';
-        }
-
-        // ...then mobile...
-
-        elseif (preg_match('/Mobi|iP(hone|od)|Android|BlackBerry/', $ua))
-        {
-            $screen = 'mobile';
-        }
-
-        // or anything else, consider as a desktop.
-
-        else
-        {
-            $screen = 'desktop';
-        }
-
-        return $screen;
     }
 
     /**

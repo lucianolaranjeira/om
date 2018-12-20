@@ -5,16 +5,19 @@
  * @package    OM
  * @author     Luciano Laranjeira <inbox@lucianolaranjeira.com>
  * @link       https://github.com/lucianolaranjeira/om
- * @version    Beta 2.3.1 • Tuesday, December 18, 2018
+ * @version    Beta 2.4.0 • Wednesday, December 19, 2018
  */
 
-use lib\App;
+use lib\File;
+use lib\Request;
+use lib\Response;
+use lib\Route;
 
 // Not Found (page). IMPORTANT! Never ever forget this route.
 
-App::match
+Route::match
 (
-    'GET', 'PUBLIC', 'notfound'
+    'notfound', Request::path()
 
   , function()
     {
@@ -22,29 +25,33 @@ App::match
 
         Response::content('text/html', 'utf-8');
 
-        App::load('../app/interface/notfound.phtml');
+        File::load('../app/interface/notfound.phtml');
+
+        exit;
     }
 );
 
 // Index.
 
-App::match
+Route::match
 (
-    'GET', 'PUBLIC', ''
+    '', Request::path()
 
   , function()
     {
         Response::status('308 Permanent Redirect');
 
-        App::redirect('home');
+        Request::redirect('home');
+
+        exit;
     }
 );
 
 // Home (page).
 
-App::match
+Route::match
 (
-    'GET', 'PUBLIC', 'home'
+    'home', Request::path()
 
   , function()
     {
@@ -52,20 +59,24 @@ App::match
 
         Response::content('text/html', 'utf-8');
 
-        App::load('../app/interface/home.phtml');
+        File::load('../app/interface/home.phtml');
+
+        exit;
     }
 );
 
 // GitHub.
 
-App::match
+Route::match
 (
-    'GET', 'PUBLIC', 'github'
+    'github', Request::path()
 
   , function()
     {
         Response::status('308 Permanent Redirect');
 
-        App::redirect('https://github.com/lucianolaranjeira/om');
+        Request::redirect('https://github.com/lucianolaranjeira/om');
+
+        exit;
     }
 );
