@@ -132,36 +132,36 @@ Route::match
 
 So here are some files to help you to do this small work.
 
-:open_file_folder:om
-    :open_file_folder:dist
-        :open_file_folder:app
-            :open_file_folder:interface
-                :page_facing_up:home.phtml
-                :page_facing_up:notfound.phtml
-            :open_file_folder:routes
-                :page_facing_up:site.php
-            :page_facing_up:start.php
-        :open_file_folder:assets
-            :open_file_folder:less
-                :page_facing_up:home.less
-                :page_facing_up:notfound.less
-            :open_file_folder:js
-                :page_facing_up:home.js
-                :page_facing_up:notfound.js
-        :open_file_folder:lib
-            :page_facing_up:Autoload.php
-            :page_facing_up:File.php
-            :page_facing_up:Request,php
-            :page_facing_up:Response.php
-            :page_facing_up:Route.php
-        :open_file_folder:public
-            :open_file_folder:scripts
-                :page_facing_up:home.js
-                :page_facing_up:notfound.js
-            :open_file_folder:  styles
-                :page_facing_up:home.css
-                :page_facing_up:notfound.css
-            :page_facing_up:index.php
+  - :open_file_folder:om
+    - :open_file_folder:dist
+      - :open_file_folder:app
+        - :open_file_folder:interface
+          - :page_facing_up:home.phtml
+          - :page_facing_up:notfound.phtml
+        - :open_file_folder:routes
+          - :page_facing_up:site.php
+        - :page_facing_up:start.php
+      - :open_file_folder:assets
+        - :open_file_folder:less
+          - :page_facing_up:home.less
+          - :page_facing_up:notfound.less
+        - :open_file_folder:js
+          - :page_facing_up:home.js
+          - :page_facing_up:notfound.js
+      - :open_file_folder:lib
+        - :page_facing_up:Autoload.php
+        - :page_facing_up:File.php
+        - :page_facing_up:Request,php
+        - :page_facing_up:Response.php
+        - :page_facing_up:Route.php
+      - :open_file_folder:public
+        - :open_file_folder:scripts
+          - :page_facing_up:home.js
+          - :page_facing_up:notfound.js
+      - :open_file_folder:  styles
+        - :page_facing_up:home.css
+        - :page_facing_up:notfound.css
+      - :page_facing_up:index.php
 
 Your website will be inside the "dist" folder. To use:
 
