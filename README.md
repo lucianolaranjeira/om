@@ -7,7 +7,7 @@ OM is a micro PHP router for web development.
 
 Sometimes you want to built really small PHP websites and/or webservices (API) using friendly URLs such as "myscompany.com/services" or "mycompany.com/contact" without using frameworks like Laravel because you actually don't need a bunch of features or functionalities.
 
-Examples:
+## Routing examples
 
 ```php
 
@@ -62,7 +62,6 @@ if (Request::method() === 'GET')
         }
     );
 }
-
 
 // Example 4.
 
@@ -129,6 +128,8 @@ Route::match
 
 ```
 
+## Setup
+
 So here are some files to help you to do this small work.
 
 Your website will be inside the "dist" folder. To use:
@@ -145,7 +146,8 @@ Your website will be inside the "dist" folder. To use:
 
 For more information, get in touch.
 
-# Gulp
+## Gulp
+
 To help you to build assets for your OM website, use the gulp folder (if you don't wanna use it, just delete these folder):
 
 1 - Install the node modules (node.js is required):
