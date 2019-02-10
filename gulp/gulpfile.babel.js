@@ -1,10 +1,10 @@
 /*!
- * .\gulpfile.babel.js
+ * ./om/gulp/gulpfile.babel.js
  *
- * package    OM Gulp
+ * package    OM
  * author     Luciano Laranjeira <inbox@lucianolaranjeira.com>
  * link       https://github.com/lucianolaranjeira/om
- * version    Beta 2.3.1 • Tuesday, December 18, 2018
+ * version    Beta 2.5.3 • Sunday, February 10, 2019
  */
 
 /*
