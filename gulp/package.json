@@ -1,6 +1,6 @@
 {
     "name": "OM",
-    "version": "2.3.1",
+    "version": "2.5.4",
     "description": "OM is a micro PHP router for web development.",
     "main": "index.js",
     "scripts": {
@@ -31,8 +31,10 @@
         "gulp-decomment": "^0.2.0",
         "gulp-less": "^4.0.1",
         "gulp-rename": "^1.4.0",
+        "gulp-sass": "^4.0.2",
         "gulp-uglify": "^3.0.1",
-        "merge2": "^1.2.2"
+        "merge2": "^1.2.2",
+        "node-sass": "^4.11.0"
     },
     "dependencies": {
         "@babel/polyfill": "^7.0.0"

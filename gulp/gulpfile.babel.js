@@ -1,10 +1,10 @@
 /*!
  * ./om/gulp/gulpfile.babel.js
  *
- * package    OM
- * author     Luciano Laranjeira <inbox@lucianolaranjeira.com>
- * link       https://github.com/lucianolaranjeira/om
- * version    Beta 2.5.3 • Sunday, February 10, 2019
+ * package OM
+ * author  Luciano Laranjeira <inbox@lucianolaranjeira.com>
+ * link    https://github.com/lucianolaranjeira/om
+ * version Beta 2.5.4 • Sunday, February 17, 2019
  */
 
 /*
@@ -25,6 +25,7 @@ import concat from 'gulp-concat';
 import rename from 'gulp-rename';
 import decomment from 'gulp-decomment';
 import less from 'gulp-less';
+import sass = from 'gulp-sass';
 import minify from 'gulp-clean-css';
 import babel from 'gulp-babel';
 import uglify from 'gulp-uglify';
@@ -36,12 +37,28 @@ import uglify from 'gulp-uglify';
  */
 
 const assets = {
+    'css': {
+        'home': [
+            '../dist/assets/css/home.css'
+        ],
+        'notfound': [
+            '../dist/assets/css/notfound.css'
+        ]
+    },
     'less': {
         'home': [
             '../dist/assets/less/home.less'
         ],
         'notfound': [
             '../dist/assets/less/notfound.less'
+        ]
+    },
+    'scss': {
+        'home': [
+            '../dist/assets/scss/home.scss'
+        ],
+        'notfound': [
+            '../dist/assets/scss/notfound.scss'
         ]
     },
     'js': {
@@ -54,59 +71,99 @@ const assets = {
     }
 };
 
-function clean(path) {
+const clean = (path) => {
 
     return remove([`${path}/**`,`!${path}`], {force: true});
 
 }
 
-function build(kind) {
+const build = async (kind) => {
 
     let streams = merge();
 
-    Object.entries(assets[kind]).forEach(([page, source]) => {
+    if (Object.keys(assets[kind]).length > 0) {
 
-        switch (kind) {
+        Object.entries(assets[kind]).forEach(([asset, source]) => {
 
-            case 'less':
+            switch (kind) {
 
-                if (source.length) {
+                case 'css':
 
-                    streams.add(
+                    if (source.length) {
 
-                        src(source, {allowEmpty: true})
-                            .pipe(concat(`${page}.less`))
-                            .pipe(less())
-                            .pipe(decomment.text())
-                            .pipe(minify())
-                            .pipe(rename(`${page}.css`))
-                            .pipe(dest('../dist/public/styles/'))
+                        streams.add(
 
-                    );
-                }
+                            src(source, {allowEmpty: true})
+                                .pipe(concat(`${asset}.css`))
+                                .pipe(decomment.text())
+                                .pipe(minify())
+                                .pipe(dest('../dist/public/styles/'))
 
-                break;
+                        );
+                    }
 
-            case 'js':
+                    break;
 
-                if (source.length) {
+                case 'less':
 
-                    streams.add(
+                    if (source.length) {
 
-                        src(source, {allowEmpty: true})
-                            .pipe(concat(`${page}.js`))
-                            .pipe(decomment())
-                            .pipe(babel())
-                            .pipe(uglify())
-                            .pipe(dest('../dist/public/scripts/'))
+                        streams.add(
 
-                    );
-                }
+                            src(source, {allowEmpty: true})
+                                .pipe(concat(`${asset}.less`))
+                                .pipe(less())
+                                .pipe(decomment.text())
+                                .pipe(minify())
+                                .pipe(rename(`${asset}.css`))
+                                .pipe(dest('../dist/public/styles/'))
 
-                break;
-        }
+                        );
+                    }
 
-    });
+                    break;
+
+                case 'scss':
+
+                    if (source.length) {
+
+                        streams.add(
+
+                            src(source, {allowEmpty: true})
+                                .pipe(concat(`${asset}.scss`))
+                                .pipe(sass())
+                                .pipe(decomment.text())
+                                .pipe(minify())
+                                .pipe(rename(`${asset}.css`))
+                                .pipe(dest('../dist/public/styles/'))
+
+                        );
+                    }
+
+                    break;
+
+                case 'js':
+
+                    if (source.length) {
+
+                        streams.add(
+
+                            src(source, {allowEmpty: true})
+                                .pipe(concat(`${asset}.js`))
+                                .pipe(decomment())
+                                .pipe(babel({presets: ['@babel/env']}))
+                                .pipe(uglify())
+                                .pipe(dest('../dist/public/scripts/'))
+
+                        );
+                    }
+
+                    break;
+            }
+
+        });
+
+    }
 
     return streams;
 };
@@ -123,9 +180,13 @@ export const clean_styles = () => clean('../dist/public/styles');
 
 // build styles.
 
+export const build_css = () => build('css');
+
 export const build_less = () => build('less');
 
-export const build_styles = series(clean_styles, parallel(build_less));
+export const build_scss = () => build('scss');
+
+export const build_styles = series(clean_styles, parallel(build_css, build_less, build_scss));
 
 /*
  |-----------------------------------------------
