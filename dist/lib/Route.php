@@ -5,7 +5,7 @@
  * @package    OM
  * @author     Luciano Laranjeira <inbox@lucianolaranjeira.com>
  * @link       https://github.com/lucianolaranjeira/om
- * @version    Beta 2.5.3 • Sunday, February 10, 2019
+ * @version    Beta 2.6.0 • Sunday, March 3, 2019
  */
 
 namespace lib;
@@ -17,9 +17,9 @@ abstract class Route
      *
      *   For instance:
      * 
-     *     path = user/macgyver
-     * 
      *     route = user/{user_id}  <<< route variables are defined with {}
+     * 
+     *     path = user/macgyver
      * 
      *   We'll have:
      * 
@@ -30,24 +30,24 @@ abstract class Route
      *
      *   This will be used through the callback.
      *
-     * @param string   $path
      * @param string   $route
+     * @param string   $path
      * @param callable $callback   (optional)
      * @param mixed    $return     (optional)
      *
      * @return boolean
      */
-    public static function match($path, $route, callable $callback = null, &$return = null)
+    public static function match($route, $path, callable $callback = null, &$return = null)
     {
         // Chop, chop, chop...
 
-        $path_slices = explode('/', $path);
-
         $route_slices = explode('/', $route);
+
+        $path_slices = explode('/', $path);
 
         // Route and Path have the same size?
 
-        if (count($path_slices) == count($route_slices))
+        if (count($route_slices) == count($path_slices))
         {
             $variables = array();
 
@@ -70,7 +70,7 @@ abstract class Route
 
             // Everything's fine?
 
-            if ($path_slices === $route_slices)
+            if ($route_slices === $path_slices)
             {
                 // Yeap. Route matches.
 
