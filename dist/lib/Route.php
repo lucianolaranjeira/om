@@ -2,10 +2,10 @@
 /**
  * ./om/dist/lib/Route.php
  *
- * @package    OM
- * @author     Luciano Laranjeira <inbox@lucianolaranjeira.com>
- * @link       https://github.com/lucianolaranjeira/om
- * @version    Beta 2.6.0 • Sunday, March 3, 2019
+ * @package OM
+ * @author  Luciano Laranjeira <inbox@lucianolaranjeira.com>
+ * @link    https://github.com/lucianolaranjeira/om
+ * @version Beta 2.6.1 • Sunday, March 3, 2019
  */
 
 namespace lib;

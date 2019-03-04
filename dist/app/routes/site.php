@@ -2,10 +2,10 @@
 /**
  * ./om/dist/app/routes/site.php
  *
- * @package    OM
- * @author     Luciano Laranjeira <inbox@lucianolaranjeira.com>
- * @link       https://github.com/lucianolaranjeira/om
- * @version    Beta 2.5.3 • Sunday, February 10, 2019
+ * @package OM
+ * @author  Luciano Laranjeira <inbox@lucianolaranjeira.com>
+ * @link    https://github.com/lucianolaranjeira/om
+ * @version Beta 2.6.1 • Sunday, March 3, 2019
  */
 
 use lib\File;
@@ -80,3 +80,9 @@ Route::match
         exit;
     }
 );
+
+// If a route wasn't found this is the right time to say something, isn't?
+
+Response::status('308 Permanent Redirect');
+
+Request::redirect('notfound');
