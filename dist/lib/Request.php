@@ -5,7 +5,7 @@
  * @package OM
  * @author  Luciano Laranjeira <inbox@lucianolaranjeira.com>
  * @link    https://github.com/lucianolaranjeira/om
- * @version Beta 2.6.1 • Sunday, March 3, 2019
+ * @version Beta 2.6.2 • Saturday, March 23, 2019
  */
 
 namespace lib;
@@ -172,7 +172,9 @@ abstract class Request
      */
     public static function parameters()
     {
-        switch(Request::$method)
+        $method = Request::method();
+
+        switch($method)
         {
             case 'GET':
 
