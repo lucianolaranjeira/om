@@ -1,11 +1,11 @@
 <?php
 /**
- * app/routes/site.php
+ * app/routes/site.php (file)
  *
  * @package OM
  * @author  Luciano Laranjeira <inbox@lucianolaranjeira.com>
  * @link    https://github.com/lucianolaranjeira/om
- * @version Beta 2.6.2 • Monday, June 24, 2019
+ * @version Beta 2.7.0 • Monday, June 24, 2019
  */
 
 use lib\File;
@@ -13,25 +13,9 @@ use lib\Request;
 use lib\Response;
 use lib\Route;
 
-// Not Found (page). IMPORTANT! Never ever forget this route.
+// Request::$folder = '/projects/om/'; // Set your project folder (optional).
 
-Route::match
-(
-    'notfound', Request::path()
-
-  , function()
-    {
-        Response::status('404 Not Found');
-
-        Response::content('text/html', 'utf-8');
-
-        File::load('../app/interface/notfound.phtml');
-
-        exit;
-    }
-);
-
-// Index.
+// Index (redirect).
 
 Route::match
 (
@@ -65,7 +49,29 @@ Route::match
     }
 );
 
-// GitHub.
+// Dump (just get REQUEST info).
+
+Route::match
+(
+    'dump', Request::path()
+
+  , function()
+    {
+        Response::status('200 OK');
+
+        Response::content('text/html', 'utf-8');
+
+        echo '<pre>';
+
+        Request::dump();
+
+        echo '</pre>';
+
+        exit;
+    }
+);
+
+// GitHub (redirect).
 
 Route::match
 (
@@ -76,6 +82,26 @@ Route::match
         Response::status('308 Permanent Redirect');
 
         Request::redirect('https://github.com/lucianolaranjeira/om');
+
+        exit;
+    }
+);
+
+// Not Found (page).
+
+// IMPORTANT! Never ever forget this route.
+
+Route::match
+(
+    'notfound', Request::path()
+
+  , function()
+    {
+        Response::status('404 Not Found');
+
+        Response::content('text/html', 'utf-8');
+
+        File::load('../app/interface/notfound.phtml');
 
         exit;
     }

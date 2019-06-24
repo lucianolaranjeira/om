@@ -1,11 +1,11 @@
 <?php
 /**
- * lib/Request.php
+ * lib/Request.php (class)
  *
  * @package OM
  * @author  Luciano Laranjeira <inbox@lucianolaranjeira.com>
  * @link    https://github.com/lucianolaranjeira/om
- * @version Beta 2.6.2 • Monday, June 24, 2019
+ * @version Beta 2.7.0 • Monday, June 24, 2019
  */
 
 namespace lib;
@@ -44,7 +44,7 @@ abstract class Request
      *
      * @return void
      */
-    public static function redirect($url)
+    public static function redirect($url): void
     {
         // If is not a valid URL...
 
@@ -61,11 +61,34 @@ abstract class Request
     }
 
     /**
+     * dump.
+     *
+     * @return void
+     */
+    public static function dump(): void
+    {
+        $request = array
+        (
+            'ip'         => Request::ip()
+          , 'ua'         => Request::ua()
+          , 'method'     => Request::method()
+          , 'protocol'   => Request::protocol()
+          , 'domain'     => Request::domain()
+          , 'port'       => Request::port()
+          , 'path'       => Request::path()
+          , 'base'       => Request::base()
+          , 'parameters' => Request::parameters()
+        );
+
+        print_r($request);
+    }
+
+    /**
      * Get IP address.
      *
      * @return string
      */
-    public static function ip()
+    public static function ip(): string
     {
         return $_SERVER['REMOTE_ADDR'];
     }
@@ -75,7 +98,7 @@ abstract class Request
      *
      * @return string
      */
-    public static function ua()
+    public static function ua(): string
     {
         return $_SERVER['HTTP_USER_AGENT'];
     }
@@ -85,7 +108,7 @@ abstract class Request
      *
      * @return string
      */
-    public static function method()
+    public static function method(): string
     {
         $method = $_SERVER['REQUEST_METHOD'];
 
@@ -113,7 +136,7 @@ abstract class Request
      *
      * @return string
      */
-    public static function protocol()
+    public static function protocol(): string
     {
         return $_SERVER['REQUEST_SCHEME'];
     }
@@ -123,7 +146,7 @@ abstract class Request
      *
      * @return string
      */
-    public static function domain()
+    public static function domain(): string
     {
         return $_SERVER['SERVER_NAME'];
     }
@@ -133,7 +156,7 @@ abstract class Request
      *
      * @return string
      */
-    public static function port()
+    public static function port(): string
     {
         return $_SERVER['SERVER_PORT'];
     }
@@ -141,9 +164,9 @@ abstract class Request
     /**
      * Get path (watch out the app folder).
      *
-     * @return string
+     * @return string | null
      */
-    public static function path()
+    public static function path(): ?string
     {
         return trim(substr(parse_url($_SERVER['REQUEST_URI'], PHP_URL_PATH), strlen(Request::$folder)), '/');
     }
@@ -153,7 +176,7 @@ abstract class Request
      *
      * @return string
      */
-    public static function base()
+    public static function base(): string
     {
         $base = Request::protocol() . '://' . Request::domain();
 
@@ -172,7 +195,7 @@ abstract class Request
      *
      * @return array
      */
-    public static function parameters()
+    public static function parameters(): array
     {
         $method = Request::method();
 
@@ -213,7 +236,7 @@ abstract class Request
      *
      * @return array
      */
-    private static function parseInputFile()
+    private static function parseInputFile(): array
     {
         $input = fopen("php://input", "r");
 

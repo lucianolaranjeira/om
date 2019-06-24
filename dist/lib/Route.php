@@ -1,11 +1,11 @@
 <?php
 /**
- * lib/Route.php
+ * lib/Route.php (class)
  *
  * @package OM
  * @author  Luciano Laranjeira <inbox@lucianolaranjeira.com>
  * @link    https://github.com/lucianolaranjeira/om
- * @version Beta 2.6.2 • Monday, June 24, 2019
+ * @version Beta 2.7.0 • Monday, June 24, 2019
  */
 
 namespace lib;
@@ -34,9 +34,9 @@ abstract class Route
      * @param callable $callback (optional)
      * @param mixed    $return   (optional)
      *
-     * @return boolean
+     * @return bool
      */
-    public static function match($route, $path, callable $callback = null, &$return = null)
+    public static function match($route, $path, callable $callback = null, &$return = null): bool
     {
         // Chop, chop, chop...
 

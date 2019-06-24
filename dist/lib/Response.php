@@ -1,11 +1,11 @@
 <?php
 /**
- * lib/Response.php
+ * lib/Response.php (class)
  *
  * @package OM
  * @author  Luciano Laranjeira <inbox@lucianolaranjeira.com>
  * @link    https://github.com/lucianolaranjeira/om
- * @version Beta 2.6.2 • Monday, June 24, 2019
+ * @version Beta 2.7.0 • Monday, June 24, 2019
  */
 
 namespace lib;
@@ -19,7 +19,7 @@ abstract class Response
      *
      * @return void
      */
-    public static function status($status)
+    public static function status($status): void
     {
         /*
            Status codes:
@@ -43,7 +43,7 @@ abstract class Response
      *
      * @return void
      */
-    public static function content($mime, $charset)
+    public static function content($mime, $charset): void
     {
         /*
            Media types (MIME):
