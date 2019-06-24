@@ -1,0 +1,5 @@
+design/* linguist-vendored
+dist/assets/* linguist-vendored
+dist/public/styles/* linguist-vendored
+dist/public/scripts/* linguist-vendored
+gulp/* linguist-vendored
