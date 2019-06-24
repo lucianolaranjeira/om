@@ -1,11 +1,11 @@
 <?php
 /**
- * ./om/dist/app/data/Site.php
+ * app/data/Site.php
  *
  * @package OM
  * @author  Luciano Laranjeira <inbox@lucianolaranjeira.com>
  * @link    https://github.com/lucianolaranjeira/om
- * @version Beta 2.6.1 • Sunday, March 3, 2019
+ * @version Beta 2.6.2 • Monday, June 24, 2019
  */
 
 namespace app\data;

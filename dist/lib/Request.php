@@ -1,11 +1,11 @@
 <?php
 /**
- * ./om/dist/lib/Request.php
+ * lib/Request.php
  *
  * @package OM
  * @author  Luciano Laranjeira <inbox@lucianolaranjeira.com>
  * @link    https://github.com/lucianolaranjeira/om
- * @version Beta 2.6.2 • Saturday, March 23, 2019
+ * @version Beta 2.6.2 • Monday, June 24, 2019
  */
 
 namespace lib;
@@ -16,7 +16,7 @@ abstract class Request
      * The REQUEST will follow the structure below:
      *
      *   GET http://domain.com:00000/myfolder/user/macgyver?firstname=Angus&lastname=MacGyver
-     *  |---|------|----------|-----|--------|--------------|---------------------------------|
+     *  |---|------|----------|-----|--------|-------------|---------------------------------|
      *   [1]   [2]     [3]      [4]    [5]         [6]                    [7]
      *
      * For example:
@@ -46,10 +46,12 @@ abstract class Request
      */
     public static function redirect($url)
     {
-        // If is not a valid URL, It's supposed to be an internal route, so just try it.
+        // If is not a valid URL...
 
         if (!filter_var($url, FILTER_VALIDATE_URL))
         {
+            // Maybe it's an internal route, so just try it.
+
             $url = Request::base() . $url;
         }
 
@@ -137,7 +139,7 @@ abstract class Request
     }
 
     /**
-     * Get path (consider the app folder).
+     * Get path (watch out the app folder).
      *
      * @return string
      */

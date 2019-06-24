@@ -1,11 +1,11 @@
 <?php
 /**
- * ./om/dist/lib/Route.php
+ * lib/Route.php
  *
  * @package OM
  * @author  Luciano Laranjeira <inbox@lucianolaranjeira.com>
  * @link    https://github.com/lucianolaranjeira/om
- * @version Beta 2.6.1 • Sunday, March 3, 2019
+ * @version Beta 2.6.2 • Monday, June 24, 2019
  */
 
 namespace lib;
@@ -15,25 +15,24 @@ abstract class Route
     /**
      * Match...
      *
-     *   For instance:
+     *   for instance:
      * 
-     *     route = user/{user_id}  <<< route variables are defined with {}
+     *     route = user/{user_id} <<< route variables are defined with {}
      * 
      *     path = user/macgyver
      * 
-     *   We'll have:
+     *   we'll have (to use through the callback):
      * 
      *     variables = array
      *     (
      *         [user_id] => macgyver
      *     )
      *
-     *   This will be used through the callback.
      *
      * @param string   $route
      * @param string   $path
-     * @param callable $callback   (optional)
-     * @param mixed    $return     (optional)
+     * @param callable $callback (optional)
+     * @param mixed    $return   (optional)
      *
      * @return boolean
      */
@@ -85,7 +84,7 @@ abstract class Route
             }
         }
 
-        // Didn't matches, not this one, not today.
+        // Didn't matches... not this one... not today.
 
         return false;
     }
