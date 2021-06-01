@@ -5,22 +5,22 @@
  * @package OM
  * @author  Luciano Laranjeira <inbox@lucianolaranjeira.com>
  * @link    https://github.com/lucianolaranjeira/om
- * @version Beta 2.7.0 • Monday, June 24, 2019
+ * @version Beta 2.7.1 • Monday, May 31, 2021
  */
 
-use app\data\Site;
+use lib\App;
 
 ?>
 <!DOCTYPE html>
 <html lang="en">
     <head>
         <meta charset="utf-8">
-        <link rel="stylesheet" type="text/css" href="<?php echo Site::url('public/styles/notfound.css'); ?>">
+        <link rel="stylesheet" type="text/css" href="<?php echo App::url('public/styles/notfound.css'); ?>">
         <title>OM • Not found</title>
     </head>
     <body>
         <h1>Not Found</h1>
         <p>For more, visit <a href="https://github.com/lucianolaranjeira/om">https://github.com/lucianolaranjeira/om</a>.</p>
-        <script src="<?php echo Site::url('public/scripts/notfound.js'); ?>"></script>
+        <script src="<?php echo App::url('public/scripts/notfound.js'); ?>"></script>
     </body>
 </html>

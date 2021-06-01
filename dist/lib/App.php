@@ -1,21 +1,19 @@
 <?php
 /**
- * app/data/Site.php (class)
+ * lib/App.php (class)
  *
  * @package OM
  * @author  Luciano Laranjeira <inbox@lucianolaranjeira.com>
  * @link    https://github.com/lucianolaranjeira/om
- * @version Beta 2.7.0 • Monday, June 24, 2019
+ * @version Beta 2.7.1 • Monday, May 31, 2021
  */
 
-namespace app\data;
+namespace lib;
 
-use lib\Request;
-
-abstract class Site
+abstract class App
 {
     /**
-     * Get URL.
+     * Build up a URL.
      *
      * @param string $path (optional)
      *

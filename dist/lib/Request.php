@@ -5,7 +5,7 @@
  * @package OM
  * @author  Luciano Laranjeira <inbox@lucianolaranjeira.com>
  * @link    https://github.com/lucianolaranjeira/om
- * @version Beta 2.7.0 • Monday, June 24, 2019
+ * @version Beta 2.7.1 • Monday, May 31, 2021
  */
 
 namespace lib;
@@ -174,17 +174,22 @@ abstract class Request
     /**
      * Get app url base.
      *
+     * @param boolean $explicit
+     *
      * @return string
      */
-    public static function base(): string
+    public static function base($explicit = false): string
     {
         $base = Request::protocol() . '://' . Request::domain();
 
-        $port = Request::port();
-
-        if ($port)
+        if ($explicit)
         {
-            $base .= ':' . $port;
+            $port = Request::port();
+
+            if ($port)
+            {
+                $base .= ':' . $port;
+            }
         }
 
         return $base . Request::$folder;
